@@ -5,7 +5,7 @@ import { fetchWeather } from "../actions/index";
 
 
 //1. App starts up and renders SearcBar component
-export default class SearchBar extends Component {
+class SearchBar extends Component {
     constructor(props) {
         super(props);
 
@@ -18,6 +18,8 @@ export default class SearchBar extends Component {
         //'this' is an instance of SearchBar class and has function
         //of onInputChange, bind that function to (this) which is SearchBar
         //then replace onInputChange with new binded instance of onInputChange
+
+        this.onFormSubmit = this.onFormSubmit.bind(this);
     }
 
 
@@ -34,6 +36,10 @@ export default class SearchBar extends Component {
         // value (ex: name of city you put in)
 
         //This function Fetches data
+        this.props.fetchWeather(this.state.term);
+
+        //clear search input
+        this.setState({ term: ''});
 
 
     }
@@ -56,6 +62,16 @@ export default class SearchBar extends Component {
         );
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ fetchWeather }, dispatch);
+//makes sure Action 'fetchWeather' goes to Middleware and to Reducers
+// action -> dispatch -> props -> gives access to wetaher data to the component
+}
+
+export default connect(null, mapDispatchToProps)(SearchBar);
+//no mapStateToProps function here so null is set as 1st argument
+
 
 //Controlled field - is a form element where the value of the input
 //is set by the State of the component
